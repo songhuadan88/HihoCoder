@@ -16,6 +16,7 @@ int N;
 int len;
 int f[2 * MAXN]; // f[i]=j means that the length of string centered at i with the largest length  is 2*j+1
 
+// get char from the extended string
 char getChar(int index)
 {
 	if (index < 0)
@@ -27,6 +28,7 @@ char getChar(int index)
 	return str[index / 2];
 }
 
+// maximum the result centered at index
 void increase(int index)
 {
 	for (;;)
@@ -48,6 +50,7 @@ int main()
 		len = strlen(str);
 		memset(f, 0, sizeof(f));
 		increase(1);
+		// use f[i-1] and f[i-2] to get the value of f[i]
 		for (int i = 2; i < 2 * len - 1; ++i)
 		{
 			if (f[i - 1] - 1>f[i - 2])
@@ -66,11 +69,11 @@ int main()
 		{
 			if (i % 2 == 0)
 			{
-				ans = max(ans, f[i] / 2 * 2 + 1);
+				ans = max(ans, f[i] / 2 * 2 + 1); // 4->5  5->5
 			}
 			else
 			{
-				ans = max(ans, (f[i] +1)/2*2);
+				ans = max(ans, (f[i] +1)/2*2); // 3->4 4->4 
 			}
 		}
 		cout << ans << endl;

@@ -1,3 +1,88 @@
+// Accepted at Dec. 10, 2016
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+using namespace std;
+
+const int MAXN = 1000000 + 5;
+const char STARTCHAR = 'a' - 1;
+const char ENDCHAR = 'a' - 2;
+const char INTERCHAR = 'a' - 3;
+
+char str[MAXN];
+int N;
+int len;
+int f[2 * MAXN]; // f[i]=j means that the length of string centered at i with the largest length  is 2*j+1
+
+char getChar(int index)
+{
+	if (index < 0)
+		return STARTCHAR;
+	if (index >= 2 * len - 1)
+		return ENDCHAR;
+	if (index % 2 == 1)
+		return INTERCHAR;
+	return str[index / 2];
+}
+
+void increase(int index)
+{
+	for (;;)
+	{
+		int nextf = f[index] + 1;
+		if (getChar(index + nextf) == getChar(index - nextf))
+			f[index] = nextf;
+		else
+			break;
+	}
+}
+
+int main()
+{
+	cin >> N;
+	while (N--)
+	{
+		cin >> str;
+		len = strlen(str);
+		memset(f, 0, sizeof(f));
+		increase(1);
+		for (int i = 2; i < 2 * len - 1; ++i)
+		{
+			if (f[i - 1] - 1>f[i - 2])
+				f[i] = f[i - 2];
+			else if (f[i - 1] - 1 < f[i - 2] && f[i-1]>=1)
+				f[i] = f[i - 1] - 1;
+			else
+			{
+				f[i] = min(f[i - 2],f[i-1]-1);
+				increase(i);
+			}
+		}
+		
+		int ans = 0;
+		for (int i = 0; i < 2 * len - 1; ++i)
+		{
+			if (i % 2 == 0)
+			{
+				ans = max(ans, f[i] / 2 * 2 + 1);
+			}
+			else
+			{
+				ans = max(ans, (f[i] +1)/2*2);
+			}
+		}
+		cout << ans << endl;
+	}
+
+	return 0;
+}
+
+
+
+
+
 // Accepted
 
 #include <iostream>
